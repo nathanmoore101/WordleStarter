@@ -2,11 +2,13 @@
 
 import random
 from WordleDictionary import FIVE_LETTER_WORDS
+
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 
 def wordle():
     
     def enter_action(s):
+
         def compare_guess(target, guess):
             nonlocal current_row
 
@@ -33,16 +35,14 @@ def wordle():
         l3 = gw.get_square_letter(current_row, N_COLS - 3)
         l4 = gw.get_square_letter(current_row, N_COLS - 2)
         l5 = gw.get_square_letter(current_row, N_COLS - 1)
+
         user_word = (l1 + l2 + l3 + l4 + l5)
         user_array = list(user_word)
         
         if user_word.lower() in FIVE_LETTER_WORDS:
             compare_guess(rand_array, user_array)
-        else:
-            gw.show_message("Not in word list")
-            
-    random_word = random.choice(FIVE_LETTER_WORDS)
-    rand_array = list(random_word.upper())
+
+
     
     print("Random word:", random_word)
 
@@ -50,6 +50,7 @@ def wordle():
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
     
+
 
 # Startup code
 
