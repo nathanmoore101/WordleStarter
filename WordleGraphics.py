@@ -16,7 +16,7 @@ N_ROWS = 6			# Number of rows
 N_COLS = 5			# Number of columns
 
 CB_CORRECT_COLOR = "#97D8C4" #color blind settings
-CB_PRESENT_COLOR = "F4B942"
+CB_PRESENT_COLOR = "#F4B942"
 
 CORRECT_COLOR = "#66BB66"       # Light green for correct letters
 PRESENT_COLOR = "#CCBB66"       # Brownish yellow for misplaced letters 
@@ -61,15 +61,17 @@ BOARD_HEIGHT = N_ROWS * SQUARE_SIZE + (N_ROWS - 1) * SQUARE_SEP
 MESSAGE_X = CANVAS_WIDTH / 2
 MESSAGE_Y = TOP_MARGIN + BOARD_HEIGHT + MESSAGE_SEP
 
-def on_button_click():
-    # This function will be executed when the button is clicked
-    print("Color Blind mode turned on.")
+
+
+    
+
 
 class WordleGWindow:
     """This class creates the Wordle window."""
 
-    def __init__(self):
+    def __init__(self, colorblind_callback=None):
         """Creates the Wordle window."""
+        
 
         def create_grid():
             return [
@@ -102,6 +104,12 @@ class WordleGWindow:
                                  CANVAS_WIDTH / 2,
                                  MESSAGE_Y)
 
+        def create_button():
+            # This function will be executed when the button is clicked
+            button = tkinter.Button(self._canvas, text='Toggle Colorblind Mode', command=colorblind_callback)
+            button.place(relx=1, rely=0, anchor='ne')
+            print("Color Blind mode turned on.")
+        
         def key_action(tke):
             if isinstance(tke, str):
                 ch = tke.upper()
@@ -132,29 +140,7 @@ class WordleGWindow:
                     sq = self._grid[self._row][self._col]
                     sq.set_letter(ch)
                     self._col += 1
-            # if isinstance(tke, str):
-            #     ch = tke.upper()
-            # else:
-            #     ch = tke.char.upper()
-            # if ch == "\007" or ch == "\177" or ch == "DELETE":
-            #     self.show_message("")
-            #     if self._row < N_ROWS and self._col > 0:
-            #         self._col -= 1
-            #         sq = self._grid[self._row][self._col]
-            #         sq.set_letter(" ")
-            # elif ch == "\r" or ch == "\n" or ch == "ENTER":
-            #     self.show_message("")
-            #     s = ""
-            #     for col in range(N_COLS):
-            #         s += self._grid[self._row][col].get_letter();
-            #     for fn in self._enter_listeners:
-            #         fn(s)
-            # elif ch.isalpha():
-            #     self.show_message("")
-            #     if self._row < N_ROWS and self._col < N_COLS:
-            #         sq = self._grid[self._row][self._col]
-            #         sq.set_letter(ch)
-            #         self._col += 1
+
 
         def press_action(tke):
             self._down_x = tke.x
@@ -190,8 +176,7 @@ class WordleGWindow:
         root.protocol("WM_DELETE_WINDOW", delete_window)
         self._root = root
         
-        button = tkinter.Button(root, text=" Color Blind", command=on_button_click)
-        button.pack(pady=20)
+  
         
         canvas = tkinter.Canvas(root,
                                 bg="White",
@@ -203,6 +188,7 @@ class WordleGWindow:
         self._grid = create_grid()
         self._message = create_message()
         self._keys = create_keyboard()
+        self._button = create_button()
         self._enter_listeners = [ ]
         root.bind("<Key>", key_action)
         root.bind("<ButtonPress-1>", press_action)

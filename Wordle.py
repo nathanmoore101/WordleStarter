@@ -2,14 +2,46 @@
 
 import random
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, CB_CORRECT_COLOR, CB_PRESENT_COLOR, KEY_LABELS
 
 def wordle():
     
+    def colorblind_callback():
+        global CORRECT_COLOR, PRESENT_COLOR
+        # Toggle between colorblind and regular mode
+        if CORRECT_COLOR == "#66BB66":
+            # Switch to colorblind mode
+            CORRECT_COLOR = CB_CORRECT_COLOR
+            PRESENT_COLOR = CB_PRESENT_COLOR
+        else:
+            # Switch to regular mode
+            CORRECT_COLOR = "#66BB66"
+            PRESENT_COLOR = "#CCBB66"
+
+        # Update colors in the WordleGWindow
+        for i in range(N_ROWS):
+            for j in range(N_COLS):
+                current_color = gw.get_square_color(i, j)
+                if current_color == "#66BB66":
+                    gw.set_square_color(i, j, CORRECT_COLOR)
+                elif current_color == "#CCBB66":
+                    gw.set_square_color(i, j, PRESENT_COLOR)
+                # Add similar checks for other colors if needed
+
+        # Update key colors
+        for row in KEY_LABELS:
+            for label in row:
+                current_color = gw.get_key_color(label)
+                if current_color == "#66BB66":
+                    gw.set_key_color(label, CORRECT_COLOR)
+                elif current_color == "#CCBB66":
+                    gw.set_key_color(label, PRESENT_COLOR)
+            
     def enter_action(s):
         def compare_guess(target, guess):
             nonlocal current_row
-            
+
+
             for i in range(0, 5):
                 if target[i] == guess[i]:
                     gw.set_square_color(current_row, i, CORRECT_COLOR)
@@ -53,8 +85,9 @@ def wordle():
     print("Random word:", random_word)
 
     current_row = 0
-    gw = WordleGWindow()
+    gw = WordleGWindow(colorblind_callback)
     gw.add_enter_listener(enter_action)
+    
     
 
 # Startup code
