@@ -61,6 +61,10 @@ BOARD_HEIGHT = N_ROWS * SQUARE_SIZE + (N_ROWS - 1) * SQUARE_SEP
 MESSAGE_X = CANVAS_WIDTH / 2
 MESSAGE_Y = TOP_MARGIN + BOARD_HEIGHT + MESSAGE_SEP
 
+def on_button_click():
+    # This function will be executed when the button is clicked
+    print("Color Blind mode turned on.")
+
 class WordleGWindow:
     """This class creates the Wordle window."""
 
@@ -185,6 +189,10 @@ class WordleGWindow:
         root.title("Wordle")
         root.protocol("WM_DELETE_WINDOW", delete_window)
         self._root = root
+        
+        button = tkinter.Button(root, text=" Color Blind", command=on_button_click)
+        button.pack(pady=20)
+        
         canvas = tkinter.Canvas(root,
                                 bg="White",
                                 width=CANVAS_WIDTH,
